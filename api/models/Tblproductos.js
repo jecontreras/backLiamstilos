@@ -16,8 +16,8 @@ module.exports = {
         type: 'string'
     },
     foto:{
-      type: 'string'  
-    }, 
+      type: 'string'
+    },
     pro_descripcion:{
         type: 'string'
     },
@@ -25,6 +25,9 @@ module.exports = {
         type: 'string'
     },
     pro_categoria:{
+        model: 'tblcategorias'
+    },
+    pro_sub_categoria:{
         model: 'tblcategorias'
     },
     cat_clave_int:{
@@ -44,7 +47,7 @@ module.exports = {
         type: 'string'
     },
     pro_usu_creacion:{
-        model: "Tblproveedor"
+        model: "tblusuario"
     },
     pro_usu_actualiz:{
         type: 'string'
@@ -125,9 +128,11 @@ module.exports = {
     pro_vendedor:{
         type: 'integer',
         defaultsTo: 0
+    },
+    pro_vendedorCompra:{
+      type: 'integer',
+      defaultsTo: 0
     }
-
-
   },
 
 };

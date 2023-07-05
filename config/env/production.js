@@ -50,7 +50,7 @@ module.exports = {
       adapter: 'sails-mysql',
       // url: 'mysql://jose:123456@locomproaqui.com/zoebodegas',
       //url: 'mysql://kh1yn4yipz0zec84:gkbelkssgvk0sgvn@en1ehf30yom7txe7.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/d5fh3onnbed1jxem'
-      url: 'mysql://root:BQo3a0p2A8uPOXjzMwP6yHtQk2F5V4e8@tzduk7.stackhero-network.com/dilishop',
+      url: "mysql://root:BQo3a0p2A8uPOXjzMwP6yHtQk2F5V4e8@tzduk7.stackhero-network.com/palma"
       // adapter: 'sails-mysql',
       // url: 'mysql://user:password@host:port/database',
       //--------------------------------------------------------------------------

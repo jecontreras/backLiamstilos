@@ -13,6 +13,7 @@
     "machinepack-passwords": "^2.3.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
+    "ngx-currency": "^2.5.3",
     "request": "^2.88.2",
     "s3": "^4.4.0",
     "sails": "^1.2.3",
