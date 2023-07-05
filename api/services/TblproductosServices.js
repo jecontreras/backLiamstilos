@@ -203,6 +203,7 @@ Procedures.getLokompro = async()=>{
 	let body = JSON.stringify({
 		"where": {
 		  "pro_activo": 0,
+      "id":429,
 		  "pro_mp_venta": 0
 		},
 		"page": 0,
