@@ -52,7 +52,7 @@ module.exports.datastores = {
     //adapter: 'sails-mongo',
     //  url: 'mysql://jose:123456@locomproaqui.com/zoebodegas',
     //url: 'mysql://kh1yn4yipz0zec84:gkbelkssgvk0sgvn@en1ehf30yom7txe7.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/d5fh3onnbed1jxem'
-    url: "mysql://root:BQo3a0p2A8uPOXjzMwP6yHtQk2F5V4e8@tzduk7.stackhero-network.com/palma"
+    url: "mysql://root:BQo3a0p2A8uPOXjzMwP6yHtQk2F5V4e8@tzduk7.stackhero-network.com/dilishop"
     //url: 'mongodb://jose147:98090871986@cluster0-shard-00-00.vwn6w.mongodb.net:27017,cluster0-shard-00-01.vwn6w.mongodb.net:27017,cluster0-shard-00-02.vwn6w.mongodb.net:27017/dilisaplive?ssl=true&replicaSet=atlas-952z0r-shard-0&authSource=admin&retryWrites=true&w=majority'
      //url: 'mysql://root:@localhost/dilishop',
 

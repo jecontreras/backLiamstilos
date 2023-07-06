@@ -17,16 +17,16 @@ module.exports = {
         required: true
     },
     numeroCelular:{
-        type: 'string'    
+        type: 'string'
     },
     emailTienda:{
-        type: 'string'      
+        type: 'string'
     },
     direccionTienda:{
-        type: 'string'        
+        type: 'string'
     },
     decripcion:{
-        type: 'string'          
+        type: 'string'
     },
     foto1:{
         type: 'json'
@@ -51,6 +51,9 @@ module.exports = {
     },
     dominio:{
         type: 'string'
+    },
+    urlAcesor:{
+      type: 'string'
     }
   },
 
