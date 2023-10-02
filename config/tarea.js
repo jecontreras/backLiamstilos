@@ -14,11 +14,11 @@ module.exports.tarea = async function() {
     tarea.unidad = "hora"
     tarea.log    = false
     tarea.accion = async function(){
-        
+
         console.log("*******************Reinicio Sistema***************")
         cron.parar()
         process.exit(0)
-        
+
     }
     cron.AgregarTarea(tarea)
 
@@ -28,7 +28,7 @@ module.exports.tarea = async function() {
     tarea.unidad = "hora"
     tarea.log    = false
     tarea.accion = async function(){
-        
+
         console.log("*******************Sincronisador de productos***************")
         await TblproductosServices.procesoCategoria();
         await TblproductosServices.nextTridy( );
@@ -39,8 +39,13 @@ module.exports.tarea = async function() {
     cron.iniciar();
 
     async function init(){
-        await TblproductosServices.procesoCategoria();
-        await TblproductosServices.nextTridy( );
+        await Cache.loadDBS('categorias');
+        await Cache.loadDBS('products');
+        await Cache.loadDBS('tallas');
+        await Cache.loadDBS('user');
+        console.log("***COMPlETADO CACHE");
+        //await TblproductosServices.procesoCategoria();
+        //await TblproductosServices.nextTridy( );
     }
-    //init();
+    init();
 }

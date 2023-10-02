@@ -8,36 +8,78 @@ let Procedures = Object();
 const _ = require('lodash');
 const moment = require('moment');
 
-Procedures.querys = async (req, res) => {
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+
+Procedures.querys = async (req, res)=>{
 	let params = req.allParams();
-	let resultado = Object();
-	console.log("***", params);
-	resultado = await QuerysServices(Tblproductos, params);
-	for (let row of resultado.data) {
-		row.listComentarios = _.orderBy( await Procedures.comentarios( row.id ), ['posicion', 'age'] );
-		if (row.cat_clave_int) row.cat_clave_int = await Tblcategorias.findOne({ where: { id: row.cat_clave_int } });
-		if (row.pro_categoria) row.pro_categoria = await Tblcategorias.findOne({ where: { id: row.pro_categoria } });
-		if (row.pro_usu_creacion) row.pro_usu_creacion = await Tblproveedor.findOne({ where: { id: row.pro_usu_creacion } });
-		if( row.pro_sw_tallas && !row.listaTallas ) {
-			row.listTallas = await Tbltallas.find({ tal_tipo: row.pro_sw_tallas });
-			row.listTallas = _.orderBy( row.listTallas, ['tal_descripcion'], ['asc'] );
+  let resultado = Object();
+  if( params.where.pro_categoria == 0 ) delete params.where.pro_categoria;
+  let cacheMan = [];
+  if( params.page == 0 ) await Cache.aleatorioList('products');
+  if( !params.where.or ) {
+    cacheMan = await Cache.leer('products');
+    cacheMan = _.orderBy( cacheMan, ['idAleatorio'], ['desc'])
+  }
+  if( cacheMan.length === 0 ) {
+    console.log("***CONSULTANDO DBS TBLPRODUCTOS*************");
+    resultado = await QuerysServices( Tblproductos, params );
+  }
+  else {
+    cacheMan = Cache.filterProcess( cacheMan, params, 'products' );
+    //cacheMan = _.orderBy( cacheMan, ['createdAt'], ['DESC'])
+    //console.log("****26", cacheMan.length)
+    resultado.count = cacheMan.length;
+    resultado.data = _.clone( Cache.paginate( cacheMan, params.limit, ( ( params.page || params.skip ) + 1 ) ) );
+    if( cacheMan.length === 0 ) resultado = ( await QuerysServices( Tblproductos, params ) );
+  }
+  let dataFinal = Array();
+
+	for(let row of resultado.data){
+    row.idAleatorio = getRandomInt(1000000000000);
+    let cuerpo = _.clone( row );
+		cuerpo.precioProveedor = cuerpo.pro_vendedor;
+    row.listComentarios = _.orderBy( await Procedures.comentarios( row.id ), ['posicion', 'age'] );
+    //row.listComment = Procedures.listComment();
+		if( cuerpo.cat_clave_int ) {
+      let cacheManCat = ( _.cloneWith( await Cache.leer('categorias') ) ).find( off => off.id === cuerpo.cat_clave_int );
+      if( !cacheMan ) {
+        console.log("***CONSULTANDO DBS************* TBLCATEGORIAS");
+        cuerpo.cat_clave_int = await Tblcategorias.findOne({ id: cuerpo.cat_clave_int });
+      }
+      else cuerpo.cat_clave_int = cacheManCat;
+    }
+		if( cuerpo.pro_usu_creacion ) {
+      let cacheManUs = ( _.cloneWith( await Cache.leer('user') ) ).find( off => off.id === cuerpo.pro_usu_creacion );
+      if( !cacheManUs ) {
+        console.log("***CONSULTANDO DBS************* TBLUSUARIO");
+        cuerpo.pro_usu_creacion = await Tblusuario.findOne({ id: cuerpo.pro_usu_creacion });
+      }
+      else cuerpo.pro_usu_creacion = cacheManUs;
+    }
+		if( cuerpo.pro_sw_tallas && !cuerpo.listaTallas ) {
+      let cacheManTl = ( _.cloneWith( await Cache.leer('tallas') ) ).find( off => off.tal_tipo === cuerpo.pro_sw_tallas );
+      if( !cacheManTl ) {
+        console.log("***CONSULTANDO DBS************* TBLTALLA");
+        cuerpo.listTallas = await Tbltallas.find({ tal_tipo: cuerpo.pro_sw_tallas });
+      }
+      else cuerpo.listTallas = cacheManTl;
+			cuerpo.listTallas = _.orderBy( cuerpo.listTallas, ['tal_descripcion'], ['asc'] );
 		}
-		if( row.listaTallas ) row.listTallas = _.orderBy( row.listaTallas, ['tal_descripcion'], ['asc'] );
-		row.galeria = [];
-		//row.galeria = ( await Tblproductosimagen.find( { where: { producto: row.id } } ) ) || [];
-		let ids = await Tblproductos.find({ where: { pro_codigo: row.pro_codigo } } );
-		ids = _.map( ids, 'id');
-		ids.push( row.id );
-		//console.log("31*************************", ids )
-		row.galeria = await Tblproductosimagen.find( { where: { producto: ids } } ).limit(6)
-		if( !row.galeria.length ) row.galeria = _.map( row.listColor, (key)=>{
-			return {
-				pri_imagen: key.foto,
-				id: key.id
-			}
-		});
+		if( cuerpo.listaTallas ) cuerpo.listTallas = _.orderBy( cuerpo.listaTallas, ['tal_descripcion'], ['asc'] );
+		if( cuerpo.pro_categoria ) {
+      let cacheManCat = ( _.cloneWith( await Cache.leer('categorias') ) ).find( off => off.id === cuerpo.pro_categoria );
+      if( !cacheManCat ) {
+        console.log("***CONSULTANDO DBS************* TBLCATEGORIAS");
+        cuerpo.pro_categoria = await Tblcategorias.findOne({ where: { id: cuerpo.pro_categoria }});
+      }
+      else cuerpo.pro_categoria = cacheManCat;
+    }
+    dataFinal.push( cuerpo );
 	}
-	return res.ok(resultado);
+  //dataFinal = _.orderBy( dataFinal, ['idAleatorio'], ['desc'])
+	return res.ok({ status:200, data:dataFinal, count: resultado.count } );
 }
 
 Procedures.comentarios = async ( id )=>{

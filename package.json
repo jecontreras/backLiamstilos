@@ -10,6 +10,7 @@
     "@sailshq/socket.io-redis": "^5.2.0",
     "firebase": "^7.9.3",
     "grunt": "1.0.4",
+    "jsonwebtoken": "^9.0.2",
     "machinepack-passwords": "^2.3.0",
     "moment": "^2.24.0",
     "moment-timezone": "^0.5.28",
