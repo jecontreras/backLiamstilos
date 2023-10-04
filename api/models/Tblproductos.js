@@ -134,6 +134,33 @@ module.exports = {
       defaultsTo: 0
     }
   },
+  beforeCreate:async(valuesToSet, proceed)=>{
+    console.log("¨¨ËNTRE create")
+    if( flagship === false ){
+      flagship = true;
+      await Cache.loadDBS('products');
+      flagship = false;
+    }
+    return proceed();
+  },
+  beforeUpdate:async(valuesToSet, proceed)=>{
+    console.log("¨¨UPDATE")
+    if( flagship === false ){
+      flagship = true;
+      await Cache.loadDBS('products');
+      flagship = false;
+    }
+    return proceed();
+  },
+  beforeDestroy:async(valuesToSet, proceed)=>{
+    console.log("¨¨DESTROY")
+    if( flagship === false ){
+      flagship = true;
+      await Cache.loadDBS('products');
+      flagship = false;
+    }
+    return proceed();
+  }
 
 };
 
