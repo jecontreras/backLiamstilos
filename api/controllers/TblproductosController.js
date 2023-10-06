@@ -59,12 +59,13 @@ Procedures.querys = async (req, res)=>{
       else cuerpo.pro_usu_creacion = cacheManUs;
     }
 		if( cuerpo.pro_sw_tallas && !cuerpo.listaTallas ) {
-      let cacheManTl = ( _.cloneWith( await Cache.leer('tallas') ) ).find( off => off.tal_tipo === cuerpo.pro_sw_tallas );
+      cuerpo.listTallas = await Tbltallas.find({ tal_tipo: cuerpo.pro_sw_tallas });
+      /*let cacheManTl = ( _.cloneWith( await Cache.leer('tallas') ) ).find( off => off.tal_tipo === cuerpo.pro_sw_tallas );
       if( !cacheManTl ) {
         console.log("***CONSULTANDO DBS************* TBLTALLA");
         cuerpo.listTallas = await Tbltallas.find({ tal_tipo: cuerpo.pro_sw_tallas });
       }
-      else cuerpo.listTallas = cacheManTl;
+      else cuerpo.listTallas = cacheManTl;*/
 			cuerpo.listTallas = _.orderBy( cuerpo.listTallas, ['tal_descripcion'], ['asc'] );
 		}
 		if( cuerpo.listaTallas ) cuerpo.listTallas = _.orderBy( cuerpo.listaTallas, ['tal_descripcion'], ['asc'] );
