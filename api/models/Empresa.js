@@ -54,6 +54,9 @@ module.exports = {
     },
     urlAcesor:{
       type: 'string'
+    },
+    urlTienda:{
+      type: 'string'
     }
   },
 
